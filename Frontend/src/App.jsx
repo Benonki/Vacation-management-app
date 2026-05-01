@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate  } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
 import Layout from './layout.jsx';
 import Login from './screens/Login';
 import Register from './screens/Register';
@@ -19,11 +19,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-              element={
-                  /*<PrivateRoute>*}
-                  <Layout />            Na potem jak będzię token
-                </PrivateRoute>*/
-                  <Layout />
+            element={
+              <PrivateRoute>
+                <Layout /> 
+              </PrivateRoute>
               }
           >
             <Route path="/" element={<Home />} />

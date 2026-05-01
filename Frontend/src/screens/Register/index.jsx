@@ -1,21 +1,38 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { registerUser } from '../../api/auth';
 import './index.css';
 
 function Register() {
     const navigate = useNavigate();
-    const [login, setLogin] = useState('');
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
         if (password !== confirmPassword) {
-            alert('Hasła nie są zgodne!');
+            setError('Hasła nie są zgodne!');
             return;
         }
 
-        navigate('/login');
+        try {
+            await registerUser({
+                name,
+                surname,
+                email,
+                password,
+            });
+
+            navigate('/login');
+        } catch (error) {
+            setError(error.response?.data?.message || 'Rejestracja nie powiodła się');
+        }
     };
 
     return (
@@ -23,14 +40,38 @@ function Register() {
             <div className="auth-card">
                 <h2>Rejestracja</h2>
                 <form onSubmit={handleSubmit}>
+                    {error && <div className="error-message">{error}</div>}
+
                     <div className="form-group">
-                        <label htmlFor="login">Login</label>
+                        <label htmlFor="name">Imię</label>
                         <input
                             type="text"
-                            id="login"
-                            value={login}
-                            onChange={(e) => setLogin(e.target.value)}
-                            placeholder="Wprowadź login"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Wprowadź imię"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="surname">Nazwisko</label>
+                        <input
+                            type="text"
+                            id="surname"
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
+                            placeholder="Wprowadź nazwisko"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Wprowadź email"
                             required
                         />
                     </div>

@@ -1,16 +1,30 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import Cookies from 'js-cookie';
+import { loginUser } from '../../api/auth';
 import './index.css';
 
 function Login() {
     const navigate = useNavigate();
-    const [login, setLogin] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/');
-    };
+
+        try {
+            const data = await loginUser({
+                email,
+                password,
+                });
+
+                Cookies.set('authToken', data.token);
+                navigate('/');
+            } catch (error) {
+                alert(error.response?.data?.message || 'Logowanie nie powiodlo sie');
+            }
+        };
 
     return (
         <div className="auth-container">
@@ -21,10 +35,10 @@ function Login() {
                         <label htmlFor="login">Login</label>
                         <input
                             type="text"
-                            id="login"
-                            value={login}
-                            onChange={(e) => setLogin(e.target.value)}
-                            placeholder="Wprowadź login"
+                            id="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Wprowadź email"
                             required
                         />
                     </div>
