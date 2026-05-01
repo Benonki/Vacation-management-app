@@ -8,6 +8,8 @@ const statusMap = {
 
 const normalizeLeave = (leave) => ({
     id: leave.id,
+    userName: leave.userName,
+    userSurname: leave.userSurname,
     dateFrom: leave.fromDate,
     dateTo: leave.toDate,
     reason: leave.reason,
@@ -31,6 +33,15 @@ export const submitLeaveRequest = async ({ dateFrom, dateTo, reason }) => {
 
 export const fetchUserLeaves = async () => {
     const response = await axiosInstance.get('/vacations/my');
+
+    return {
+        success: true,
+        data: response.data.map(normalizeLeave),
+    };
+};
+
+export const fetchAllLeaves = async () => {
+    const response = await axiosInstance.get('/vacations');
 
     return {
         success: true,
