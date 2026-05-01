@@ -6,6 +6,7 @@ import com.vacation.vacation_management.domain.dtos.RegisterRequest;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.repositories.UserRepository;
 import com.vacation.vacation_management.services.AuthService;
+import com.vacation.vacation_management.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -33,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(userToSave);
 
-        return new AuthResponse("TOKEN");
+        return new AuthResponse(jwtUtil.generateToken(userToSave));
     }
 
     @Override
@@ -45,6 +47,6 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
-        return new AuthResponse("TOKEN");
+        return new AuthResponse(jwtUtil.generateToken(user));
     }
 }
