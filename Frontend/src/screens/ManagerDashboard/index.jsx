@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FiCalendar, FiFileText, FiUser } from 'react-icons/fi';
-import { fetchAllLeaves } from '../../api/leave';
+import { FiCalendar, FiCheck, FiFileText, FiUser, FiX } from 'react-icons/fi';
+import { approveLeaveRequest, fetchAllLeaves, rejectLeaveRequest } from '../../api/leave';
 import './index.css';
 
 const statusLabels = {
@@ -13,6 +13,7 @@ function ManagerDashboard() {
     const [leaves, setLeaves] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [updatingId, setUpdatingId] = useState('');
 
     useEffect(() => {
         loadLeaves();
@@ -41,6 +42,44 @@ function ManagerDashboard() {
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('pl-PL');
+    };
+
+    const replaceLeave = (updatedLeave) => {
+        setLeaves((currentLeaves) => currentLeaves.map((leave) => (
+            leave.id === updatedLeave.id ? updatedLeave : leave
+        )));
+    };
+
+    const handleApprove = async (id) => {
+        setUpdatingId(id);
+        setError('');
+
+        try {
+            const response = await approveLeaveRequest(id);
+            if (response.success) {
+                replaceLeave(response.data);
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Nie udało się zaakceptować wniosku');
+        } finally {
+            setUpdatingId('');
+        }
+    };
+
+    const handleReject = async (id) => {
+        setUpdatingId(id);
+        setError('');
+
+        try {
+            const response = await rejectLeaveRequest(id);
+            if (response.success) {
+                replaceLeave(response.data);
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Nie udało się odrzucić wniosku');
+        } finally {
+            setUpdatingId('');
+        }
     };
 
     return (
@@ -101,6 +140,29 @@ function ManagerDashboard() {
                                     <span className="detail-value">{leave.reason}</span>
                                 </div>
                             </div>
+
+                            {leave.status === 'pending' && (
+                                <div className="manager-actions">
+                                    <button
+                                        type="button"
+                                        className="decision-button approve-button"
+                                        onClick={() => handleApprove(leave.id)}
+                                        disabled={updatingId === leave.id}
+                                    >
+                                        <FiCheck className="button-icon" />
+                                        <span>Akceptuj</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="decision-button reject-button"
+                                        onClick={() => handleReject(leave.id)}
+                                        disabled={updatingId === leave.id}
+                                    >
+                                        <FiX className="button-icon" />
+                                        <span>Odrzuć</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

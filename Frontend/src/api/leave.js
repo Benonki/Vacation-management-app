@@ -48,3 +48,21 @@ export const fetchAllLeaves = async () => {
         data: response.data.map(normalizeLeave),
     };
 };
+
+export const approveLeaveRequest = async (id) => {
+    const response = await axiosInstance.patch(`/vacations/${id}/approve`);
+
+    return {
+        success: true,
+        data: normalizeLeave(response.data),
+    };
+};
+
+export const rejectLeaveRequest = async (id) => {
+    const response = await axiosInstance.patch(`/vacations/${id}/reject`);
+
+    return {
+        success: true,
+        data: normalizeLeave(response.data),
+    };
+};
