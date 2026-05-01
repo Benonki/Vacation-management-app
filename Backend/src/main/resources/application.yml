@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/vacation_db}
+    username: ${SPRING_DATASOURCE_USERNAME:vacation_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:vacation_pass}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+jwt:
+  secret: ${JWT_SECRET:JWTSECRETKEYFORTESTINGONLY}
+  expiration: ${JWT_EXPIRATION:86400000}
