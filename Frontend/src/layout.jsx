@@ -26,11 +26,6 @@ const Layout = () => {
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/profile" className={`nav-link ${isActive("/profile")}`}>
-                            <span className="nav-text">Profil</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
                         <Link to="/manager" className={`nav-link ${isActive("/manager")}`}>
                             <span className="nav-text">Wnioski</span>
                         </Link>

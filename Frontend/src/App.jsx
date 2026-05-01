@@ -3,7 +3,6 @@ import Layout from './layout.jsx';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import Home from './screens/Home';
-import Profile from './screens/Profile';
 import ManagerDashboard from './screens/ManagerDashboard';
 import './App.css'
 import Cookies from "js-cookie";
@@ -27,7 +26,6 @@ function App() {
               }
           >
             <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="/manager" element={<ManagerDashboard />} />
           </Route>
         </Routes>
