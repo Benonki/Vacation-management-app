@@ -3,6 +3,7 @@ package com.vacation.vacation_management.config;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.repositories.UserRepository;
 import com.vacation.vacation_management.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,17 +30,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(header != null && header.startsWith("Bearer ")){
             String token = header.substring(7);
+            try{
+                if(jwtUtil.isValid(token)){
+                    String email = jwtUtil.extractEmail(token);
+                    User user = userRepository.findByEmail(email).orElse(null);
 
-            if(jwtUtil.isValid(token)){
-                String email = jwtUtil.extractEmail(token);
-                User user = userRepository.findByEmail(email).orElse(null);
-
-                if(user != null){
-                    UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    if(user != null){
+                        UsernamePasswordAuthenticationToken auth =
+                                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
                 }
+            }catch (ExpiredJwtException e){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"message\": \"Token expired\"}");
+                return;
             }
+
         }
         filterChain.doFilter(request, response);
     }

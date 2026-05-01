@@ -2,6 +2,7 @@ package com.vacation.vacation_management.util;
 
 import com.vacation.vacation_management.domain.entity.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -43,7 +44,10 @@ public class JwtUtil {
         try{
             getClaims(token);
             return true;
-        }catch (JwtException e){
+        }catch (ExpiredJwtException e){
+            throw e;
+        }
+        catch (JwtException e){
             return false;
         }
     }
