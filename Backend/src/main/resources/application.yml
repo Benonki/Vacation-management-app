@@ -9,5 +9,9 @@ spring:
       ddl-auto: create-drop
 
 jwt:
-  secret: ${JWT_SECRET:JWTSECRETKEYFORTESTINGONLY}
+  secret: ${JWT_SECRET:JWTSECRETKEYFORTESTINGONLY12345678}
   expiration: ${JWT_EXPIRATION:86400000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger

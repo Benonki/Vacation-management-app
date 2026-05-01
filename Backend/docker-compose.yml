@@ -20,7 +20,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vacation_db
       SPRING_DATASOURCE_USERNAME: vacation_user
       SPRING_DATASOURCE_PASSWORD: vacation_pass
-      JWT_SECRET: JWTSECRETKEYFORTESTINGONLY
+      JWT_SECRET: JWTSECRETKEYFORTESTINGONLY12345678
       JWT_EXPIRATION: 86400000
     depends_on:
       - postgres
