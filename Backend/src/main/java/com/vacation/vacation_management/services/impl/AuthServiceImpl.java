@@ -5,6 +5,8 @@ import com.vacation.vacation_management.domain.dtos.LoginRequest;
 import com.vacation.vacation_management.domain.dtos.RegisterRequest;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.domain.enums.Role;
+import com.vacation.vacation_management.exceptions.EmailAlreadyTakenException;
+import com.vacation.vacation_management.exceptions.InvalidCredentialsException;
 import com.vacation.vacation_management.repositories.UserRepository;
 import com.vacation.vacation_management.services.AuthService;
 import com.vacation.vacation_management.util.JwtUtil;
@@ -24,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse register(RegisterRequest request) {
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new RuntimeException("Email already taken");
+            throw new EmailAlreadyTakenException(request.getEmail());
         }
 
         User userToSave = User.builder()
@@ -43,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(InvalidCredentialsException::new);
 
         if(!passwordEncoder.matches(request.getPassword(), user.getHashPassword())){
             throw new RuntimeException("Invalid email or password");

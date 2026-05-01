@@ -5,6 +5,7 @@ import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.domain.entity.VacationRequest;
 import com.vacation.vacation_management.domain.enums.VacationStatus;
+import com.vacation.vacation_management.exceptions.ResourceNotFoundException;
 import com.vacation.vacation_management.mappers.VacationRequestMapper;
 import com.vacation.vacation_management.repositories.UserRepository;
 import com.vacation.vacation_management.repositories.VacationRepository;
@@ -27,9 +28,9 @@ public class VacationServiceImpl implements VacationService {
 
     @Override
     public VacationRequestResponse createRequest(VacationRequestDto dto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found " + email));
 
-        if(dto.getToDate().isBefore(dto.getToDate())){
+        if(dto.getToDate().isBefore(dto.getFromDate())){
             throw new RuntimeException("End date cannot be before start date");
         }
 
@@ -49,7 +50,7 @@ public class VacationServiceImpl implements VacationService {
 
     @Override
     public List<VacationRequestResponse> getMyRequests(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found " + email));
 
         return vacationRepository.findByUser(user)
                 .stream()
@@ -76,7 +77,7 @@ public class VacationServiceImpl implements VacationService {
     }
 
     private VacationRequestResponse changeStatus(UUID id, VacationStatus status){
-        VacationRequest request = vacationRepository.findById(id).orElseThrow(() -> new RuntimeException("Request not found"));
+        VacationRequest request = vacationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Request not found " + id));
 
         request.setStatus(status);
         vacationRepository.save(request);
