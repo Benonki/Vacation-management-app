@@ -62,7 +62,8 @@ function Home() {
                 loadLeaves();
             }
         } catch (error) {
-            setFormError(`Wystąpił błąd podczas składania wniosku: ${error.message || error}`);
+            const message = error.response?.data?.message || error.message || 'Spróbuj ponownie później';
+            setFormError(`Wystąpił błąd podczas składania wniosku: ${message}`);
         }
     };
 
