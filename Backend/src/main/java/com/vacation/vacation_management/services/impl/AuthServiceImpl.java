@@ -4,6 +4,7 @@ import com.vacation.vacation_management.domain.dtos.AuthResponse;
 import com.vacation.vacation_management.domain.dtos.LoginRequest;
 import com.vacation.vacation_management.domain.dtos.RegisterRequest;
 import com.vacation.vacation_management.domain.entity.User;
+import com.vacation.vacation_management.domain.enums.Role;
 import com.vacation.vacation_management.repositories.UserRepository;
 import com.vacation.vacation_management.services.AuthService;
 import com.vacation.vacation_management.util.JwtUtil;
@@ -31,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
                 .surname(request.getSurname())
                 .email(request.getEmail())
                 .hashPassword(passwordEncoder.encode(request.getPassword()))
+                .role(Role.WORKER)
                 .build();
 
         userRepository.save(userToSave);
