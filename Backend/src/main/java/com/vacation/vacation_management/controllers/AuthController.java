@@ -1,0 +1,29 @@
+package com.vacation.vacation_management.controllers;
+
+import com.vacation.vacation_management.domain.dtos.AuthResponse;
+import com.vacation.vacation_management.domain.dtos.LoginRequest;
+import com.vacation.vacation_management.domain.dtos.RegisterRequest;
+import com.vacation.vacation_management.services.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(path = "/api/auth")
+@RequiredArgsConstructor
+public class AuthController {
+    private final AuthService authService;
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.login(request));
+    }
+}
