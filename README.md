@@ -1,6 +1,6 @@
 # Vacation management App
 
-A vacation management app built with JavaScript and React that helps to manage employee vacations and time off, powered by a Spring Boot backend with === as the database.
+A vacation management app built with JavaScript and React that helps to manage employee vacations and time off, powered by a Spring Boot backend with PostgreSQL as the database.
 
 ## 📝 Requirements
 
@@ -24,14 +24,13 @@ A vacation management app built with JavaScript and React that helps to manage e
        npm audit fix
         ```
 ## 🚀 Running the App
-1. Configure your Database connection in `.env` file in `Backend`
-2. Start `Backend` Server
-3. Open console and get into `/Frontend`:
+1. Start `Backend` Server: do the steps described in `Backend/README.md`
+2. Open console and get into `/Frontend`:
    ```bash
    cd Frontend
    ```
-4. Start App:
+3. Start App:
    ```bash
    npm run dev
    ```
-5. You can open App on http://localhost:5173/ on your PC.
+4. You can open App on http://localhost:5173/ on your PC.
