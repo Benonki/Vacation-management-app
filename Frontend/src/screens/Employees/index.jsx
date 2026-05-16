@@ -4,7 +4,7 @@ import { fetchUsers, updateUserVacationDays } from '../../api/users';
 import './index.css';
 
 const roleLabels = {
-    MANAGER: 'Manager',
+    MANAGER: 'Kierownik',
     WORKER: 'Pracownik',
 };
 
