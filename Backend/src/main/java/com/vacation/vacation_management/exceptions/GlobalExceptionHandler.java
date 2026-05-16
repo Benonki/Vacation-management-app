@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal server error"));
     }
+
+    @ExceptionHandler(NotEnoughDaysOff.class)
+    public ResponseEntity<ErrorResponse> handleNotEnoughDays(NotEnoughDaysOff e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    }
 }

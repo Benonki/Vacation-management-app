@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String hashPassword;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private int vacationDays;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
