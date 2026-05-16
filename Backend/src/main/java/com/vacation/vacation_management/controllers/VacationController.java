@@ -1,8 +1,6 @@
 package com.vacation.vacation_management.controllers;
 
-import com.vacation.vacation_management.domain.dtos.RejectRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
+import com.vacation.vacation_management.domain.dtos.*;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.services.VacationService;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +48,14 @@ public class VacationController {
     public ResponseEntity<VacationRequestResponse> rejectRequest(@RequestBody RejectRequestDto requestDto){
         return ResponseEntity.ok(vacationService.rejectRequest(requestDto));
     }
+
+    @PatchMapping("/users/{id}/vacation-days")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<UserResponse> updateVacationDays(
+            @PathVariable UUID id,
+            @RequestBody UpdateVacationDaysDto dto){
+        return ResponseEntity.ok(vacationService.updateVacationDays(id,dto));
+    }
+
+
 }

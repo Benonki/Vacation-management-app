@@ -1,8 +1,7 @@
 package com.vacation.vacation_management.services;
 
-import com.vacation.vacation_management.domain.dtos.RejectRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
+import com.vacation.vacation_management.domain.dtos.*;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,5 +12,5 @@ public interface VacationService {
     public List<VacationRequestResponse> getAllRequests();
     public VacationRequestResponse approveRequest(UUID id);
     public VacationRequestResponse rejectRequest(RejectRequestDto requestDto);
-
+    UserResponse updateVacationDays(UUID id, UpdateVacationDaysDto dto);
 }

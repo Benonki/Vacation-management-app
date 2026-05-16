@@ -1,8 +1,6 @@
 package com.vacation.vacation_management.services.impl;
 
-import com.vacation.vacation_management.domain.dtos.RejectRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestDto;
-import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
+import com.vacation.vacation_management.domain.dtos.*;
 import com.vacation.vacation_management.domain.entity.User;
 import com.vacation.vacation_management.domain.entity.VacationRequest;
 import com.vacation.vacation_management.domain.enums.VacationStatus;
@@ -90,6 +88,28 @@ public class VacationServiceImpl implements VacationService {
     @Override
     public VacationRequestResponse rejectRequest(RejectRequestDto requestDto) {
         return changeStatus(requestDto.requestId, VacationStatus.DECLINED, requestDto.rejectionReason);
+    }
+
+    @Override
+    public UserResponse updateVacationDays(UUID id, UpdateVacationDaysDto dto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found " + id));
+
+        if(dto.getVacationDays() < 0){
+            throw new RuntimeException("Vacation days cannot be less than 0");
+        }
+
+        user.setVacationDays(dto.getVacationDays());
+        userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .vacationDays(user.getVacationDays())
+                .build();
+
     }
 
     private VacationRequestResponse changeStatus(UUID id, VacationStatus status,  String reason) {
