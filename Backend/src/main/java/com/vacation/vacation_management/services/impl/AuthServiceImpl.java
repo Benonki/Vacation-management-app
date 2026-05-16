@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .hashPassword(passwordEncoder.encode(request.getPassword()))
                 .role(Role.WORKER)
+                .vacationDays(20)
                 .build();
 
         userRepository.save(userToSave);

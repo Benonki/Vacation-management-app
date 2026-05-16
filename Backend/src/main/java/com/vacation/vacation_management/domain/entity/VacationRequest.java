@@ -29,6 +29,7 @@ public class VacationRequest {
     private LocalDate fromDate;
     private LocalDate toDate;
     private String reason;
+    private String rejectionReason;
 
     @Enumerated(EnumType.STRING)
     private VacationStatus status;

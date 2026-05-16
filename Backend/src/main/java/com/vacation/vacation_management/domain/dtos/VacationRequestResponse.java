@@ -19,5 +19,6 @@ public class VacationRequestResponse {
     private LocalDate fromDate;
     private LocalDate toDate;
     private String reason;
+    private String rejectionReason;
     private VacationStatus status;
 }
