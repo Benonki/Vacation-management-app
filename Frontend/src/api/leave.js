@@ -13,6 +13,7 @@ const normalizeLeave = (leave) => ({
     dateFrom: leave.fromDate,
     dateTo: leave.toDate,
     reason: leave.reason,
+    rejectionReason: leave.rejectionReason,
     status: statusMap[leave.status] || leave.status?.toLowerCase(),
     submissionDate: leave.submissionDate,
 });
@@ -58,8 +59,11 @@ export const approveLeaveRequest = async (id) => {
     };
 };
 
-export const rejectLeaveRequest = async (id) => {
-    const response = await axiosInstance.patch(`/vacations/${id}/reject`);
+export const rejectLeaveRequest = async ({ id, rejectionReason }) => {
+    const response = await axiosInstance.patch('/vacations/reject', {
+        requestId: id,
+        rejectionReason,
+    });
 
     return {
         success: true,

@@ -6,6 +6,7 @@ import Home from './screens/Home';
 import ManagerDashboard from './screens/ManagerDashboard';
 import './App.css'
 import Cookies from "js-cookie";
+import Employees from "./screens/Employees/index.jsx";
 
 const PrivateRoute = ({ children }) => {
     const accessToken = Cookies.get('authToken');
@@ -21,12 +22,13 @@ function App() {
           <Route
             element={
               <PrivateRoute>
-                <Layout /> 
+                <Layout />
               </PrivateRoute>
               }
           >
             <Route path="/" element={<Home />} />
             <Route path="/manager" element={<ManagerDashboard />} />
+            <Route path="/manager/employees" element={<Employees />} />
           </Route>
         </Routes>
       </BrowserRouter>

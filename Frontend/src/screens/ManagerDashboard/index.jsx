@@ -14,6 +14,8 @@ function ManagerDashboard() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [updatingId, setUpdatingId] = useState('');
+    const [rejectingId, setRejectingId] = useState('');
+    const [rejectionReason, setRejectionReason] = useState('');
 
     useEffect(() => {
         loadLeaves();
@@ -41,6 +43,10 @@ function ManagerDashboard() {
     };
 
     const formatDate = (dateString) => {
+        if (!dateString) {
+            return '-';
+        }
+
         return new Date(dateString).toLocaleDateString('pl-PL');
     };
 
@@ -66,14 +72,37 @@ function ManagerDashboard() {
         }
     };
 
+    const openRejectForm = (id) => {
+        setRejectingId(id);
+        setRejectionReason('');
+        setError('');
+    };
+
+    const closeRejectForm = () => {
+        setRejectingId('');
+        setRejectionReason('');
+    };
+
     const handleReject = async (id) => {
+        const trimmedReason = rejectionReason.trim();
+
+        if (!trimmedReason) {
+            setError('Podaj powód odrzucenia wniosku');
+            return;
+        }
+
         setUpdatingId(id);
         setError('');
 
         try {
-            const response = await rejectLeaveRequest(id);
+            const response = await rejectLeaveRequest({
+                id,
+                rejectionReason: trimmedReason,
+            });
+
             if (response.success) {
                 replaceLeave(response.data);
+                closeRejectForm();
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Nie udało się odrzucić wniosku');
@@ -116,6 +145,7 @@ function ManagerDashboard() {
                                     </span>
                                     <span className="detail-value">{leave.userName} {leave.userSurname}</span>
                                 </div>
+
                                 <div className="detail-row">
                                     <span className="detail-label">
                                         <FiCalendar className="detail-icon" />
@@ -123,6 +153,7 @@ function ManagerDashboard() {
                                     </span>
                                     <span className="detail-value">{formatDate(leave.submissionDate)}</span>
                                 </div>
+
                                 <div className="detail-row">
                                     <span className="detail-label">
                                         <FiCalendar className="detail-icon" />
@@ -132,6 +163,7 @@ function ManagerDashboard() {
                                         {formatDate(leave.dateFrom)} - {formatDate(leave.dateTo)}
                                     </span>
                                 </div>
+
                                 <div className="detail-row">
                                     <span className="detail-label">
                                         <FiFileText className="detail-icon" />
@@ -139,29 +171,78 @@ function ManagerDashboard() {
                                     </span>
                                     <span className="detail-value">{leave.reason}</span>
                                 </div>
+
+                                {leave.status === 'rejected' && leave.rejectionReason && (
+                                    <div className="detail-row">
+                                        <span className="detail-label">
+                                            <FiFileText className="detail-icon" />
+                                            Powód odrzucenia:
+                                        </span>
+                                        <span className="detail-value">{leave.rejectionReason}</span>
+                                    </div>
+                                )}
                             </div>
 
                             {leave.status === 'pending' && (
-                                <div className="manager-actions">
-                                    <button
-                                        type="button"
-                                        className="decision-button approve-button"
-                                        onClick={() => handleApprove(leave.id)}
-                                        disabled={updatingId === leave.id}
-                                    >
-                                        <FiCheck className="button-icon" />
-                                        <span>Akceptuj</span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="decision-button reject-button"
-                                        onClick={() => handleReject(leave.id)}
-                                        disabled={updatingId === leave.id}
-                                    >
-                                        <FiX className="button-icon" />
-                                        <span>Odrzuć</span>
-                                    </button>
-                                </div>
+                                <>
+                                    <div className="manager-actions">
+                                        <button
+                                            type="button"
+                                            className="decision-button approve-button"
+                                            onClick={() => handleApprove(leave.id)}
+                                            disabled={updatingId === leave.id}
+                                        >
+                                            <FiCheck className="button-icon" />
+                                            <span>Akceptuj</span>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            className="decision-button reject-button"
+                                            onClick={() => openRejectForm(leave.id)}
+                                            disabled={updatingId === leave.id}
+                                        >
+                                            <FiX className="button-icon" />
+                                            <span>Odrzuć</span>
+                                        </button>
+                                    </div>
+
+                                    {rejectingId === leave.id && (
+                                        <div className="reject-form">
+                                            <label htmlFor={`reject-reason-${leave.id}`}>
+                                                Powód odrzucenia
+                                            </label>
+
+                                            <textarea
+                                                id={`reject-reason-${leave.id}`}
+                                                value={rejectionReason}
+                                                onChange={(event) => setRejectionReason(event.target.value)}
+                                                placeholder="Np. brak wystarczającego uzasadnienia"
+                                                rows="3"
+                                            />
+
+                                            <div className="reject-form-actions">
+                                                <button
+                                                    type="button"
+                                                    className="decision-button reject-button"
+                                                    onClick={() => handleReject(leave.id)}
+                                                    disabled={updatingId === leave.id}
+                                                >
+                                                    Potwierdź odrzucenie
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    className="secondary-button"
+                                                    onClick={closeRejectForm}
+                                                    disabled={updatingId === leave.id}
+                                                >
+                                                    Anuluj
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </div>
                     ))}

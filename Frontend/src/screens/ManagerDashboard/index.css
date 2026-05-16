@@ -61,6 +61,30 @@
     gap: 0.5rem;
 }
 
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.95rem;
+}
+
+.detail-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #555;
+    font-weight: 600;
+}
+
+.detail-value {
+    color: #222;
+    text-align: right;
+}
+
+.detail-icon {
+    flex-shrink: 0;
+}
+
 .manager-actions {
     display: flex;
     gap: 0.75rem;
@@ -110,6 +134,108 @@
     box-shadow: 0 4px 12px rgba(198, 40, 40, 0.25);
 }
 
+.secondary-button {
+    min-height: 42px;
+    padding: 0.65rem 1rem;
+    border: 1px solid #bdbdbd;
+    border-radius: 8px;
+    background: white;
+    color: #333;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secondary-button:hover:not(:disabled) {
+    background: #eeeeee;
+}
+
+.secondary-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.reject-form {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    background: #fff5f5;
+}
+
+.reject-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #c62828;
+    font-weight: 600;
+}
+
+.reject-form textarea {
+    width: 100%;
+    min-height: 90px;
+    resize: vertical;
+    padding: 0.75rem;
+    border: 1px solid #ef9a9a;
+    border-radius: 8px;
+    font: inherit;
+    outline: none;
+}
+
+.reject-form textarea:focus {
+    border-color: #c62828;
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12);
+}
+
+.reject-form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #fff8e1;
+    color: #f57f17;
+}
+
+.status-approved {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-rejected {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.error-message {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: #ffebee;
+    color: #c62828;
+    font-weight: 500;
+}
+
+.loading,
+.no-leaves {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: #f5f5f5;
+    color: #555;
+    text-align: center;
+}
+
 @media (max-width: 720px) {
     .manager-container {
         padding: 1rem;
@@ -124,7 +250,17 @@
         align-items: stretch;
     }
 
-    .manager-actions {
+    .manager-actions,
+    .reject-form-actions {
         flex-direction: column;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .detail-value {
+        text-align: left;
     }
 }

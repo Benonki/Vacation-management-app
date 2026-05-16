@@ -30,6 +30,11 @@ const Layout = () => {
                             <span className="nav-text">Wnioski</span>
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="/manager/employees" className={`nav-link ${isActive("/manager/employees")}`}>
+                            <span className="nav-text">Pracownicy</span>
+                        </Link>
+                    </li>
                 </ul>
                 <button className="logout-button" onClick={handleLogout}>
                     <span className="logout-text">Wyloguj</span>
