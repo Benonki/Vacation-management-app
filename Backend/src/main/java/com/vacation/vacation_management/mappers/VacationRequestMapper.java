@@ -16,6 +16,7 @@ public class VacationRequestMapper {
                 .fromDate(vacationRequest.getFromDate())
                 .toDate(vacationRequest.getToDate())
                 .reason(vacationRequest.getReason())
+                .rejectionReason(vacationRequest.getRejectionReason())
                 .status(vacationRequest.getStatus())
                 .build();
     }

@@ -1,5 +1,6 @@
 package com.vacation.vacation_management.services.impl;
 
+import com.vacation.vacation_management.domain.dtos.RejectRequestDto;
 import com.vacation.vacation_management.domain.dtos.VacationRequestDto;
 import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
 import com.vacation.vacation_management.domain.entity.User;
@@ -83,28 +84,36 @@ public class VacationServiceImpl implements VacationService {
 
     @Override
     public VacationRequestResponse approveRequest(UUID id) {
-        return changeStatus(id, VacationStatus.APPROVED);
+        return changeStatus(id, VacationStatus.APPROVED, null);
     }
 
     @Override
-    public VacationRequestResponse rejectRequest(UUID id) {
-        return changeStatus(id, VacationStatus.DECLINED);
+    public VacationRequestResponse rejectRequest(RejectRequestDto requestDto) {
+        return changeStatus(requestDto.requestId, VacationStatus.DECLINED, requestDto.rejectionReason);
     }
 
-    private VacationRequestResponse changeStatus(UUID id, VacationStatus status){
+    private VacationRequestResponse changeStatus(UUID id, VacationStatus status,  String reason) {
         VacationRequest request = vacationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Request not found " + id));
 
-        if(status == VacationStatus.APPROVED){
-            User user = request.getUser();
-            long amountOfDaysOff = ChronoUnit.DAYS.between(request.getFromDate(), request.getToDate()) + 1;
 
-            if(amountOfDaysOff > user.getVacationDays()){
-                throw new NotEnoughDaysOff("Not enough days off");
-            }
+        switch (status){
+            case APPROVED:
+                User user = request.getUser();
+                long amountOfDaysOff = ChronoUnit.DAYS.between(request.getFromDate(), request.getToDate()) + 1;
 
-            user.setVacationDays(user.getVacationDays() - (int) amountOfDaysOff);
-            userRepository.save(user);
+                if(amountOfDaysOff > user.getVacationDays()){
+                    throw new NotEnoughDaysOff("Not enough days off");
+                }
+
+                user.setVacationDays(user.getVacationDays() - (int) amountOfDaysOff);
+                userRepository.save(user);
+                break;
+
+            case DECLINED:
+                request.setRejectionReason(reason);
+                break;
         }
+
 
         request.setStatus(status);
         vacationRepository.save(request);

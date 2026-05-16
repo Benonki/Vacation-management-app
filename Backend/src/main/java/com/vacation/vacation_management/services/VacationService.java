@@ -1,5 +1,6 @@
 package com.vacation.vacation_management.services;
 
+import com.vacation.vacation_management.domain.dtos.RejectRequestDto;
 import com.vacation.vacation_management.domain.dtos.VacationRequestDto;
 import com.vacation.vacation_management.domain.dtos.VacationRequestResponse;
 
@@ -11,6 +12,6 @@ public interface VacationService {
     public List<VacationRequestResponse> getMyRequests(String email);
     public List<VacationRequestResponse> getAllRequests();
     public VacationRequestResponse approveRequest(UUID id);
-    public VacationRequestResponse rejectRequest(UUID id);
+    public VacationRequestResponse rejectRequest(RejectRequestDto requestDto);
 
 }
