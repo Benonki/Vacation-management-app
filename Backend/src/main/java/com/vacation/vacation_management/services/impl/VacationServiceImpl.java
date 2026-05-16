@@ -90,28 +90,6 @@ public class VacationServiceImpl implements VacationService {
         return changeStatus(requestDto.requestId, VacationStatus.DECLINED, requestDto.rejectionReason);
     }
 
-    @Override
-    public UserResponse updateVacationDays(UUID id, UpdateVacationDaysDto dto) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found " + id));
-
-        if(dto.getVacationDays() < 0){
-            throw new RuntimeException("Vacation days cannot be less than 0");
-        }
-
-        user.setVacationDays(dto.getVacationDays());
-        userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .vacationDays(user.getVacationDays())
-                .build();
-
-    }
-
     private VacationRequestResponse changeStatus(UUID id, VacationStatus status,  String reason) {
         VacationRequest request = vacationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Request not found " + id));
 

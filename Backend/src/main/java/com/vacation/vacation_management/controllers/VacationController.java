@@ -48,14 +48,4 @@ public class VacationController {
     public ResponseEntity<VacationRequestResponse> rejectRequest(@RequestBody RejectRequestDto requestDto){
         return ResponseEntity.ok(vacationService.rejectRequest(requestDto));
     }
-
-    @PatchMapping("/users/{id}/vacation-days")
-    @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<UserResponse> updateVacationDays(
-            @PathVariable UUID id,
-            @RequestBody UpdateVacationDaysDto dto){
-        return ResponseEntity.ok(vacationService.updateVacationDays(id,dto));
-    }
-
-
 }

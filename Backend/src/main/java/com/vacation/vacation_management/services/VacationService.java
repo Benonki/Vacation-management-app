@@ -12,5 +12,4 @@ public interface VacationService {
     public List<VacationRequestResponse> getAllRequests();
     public VacationRequestResponse approveRequest(UUID id);
     public VacationRequestResponse rejectRequest(RejectRequestDto requestDto);
-    UserResponse updateVacationDays(UUID id, UpdateVacationDaysDto dto);
 }
